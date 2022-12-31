@@ -16,8 +16,6 @@ public class PerlinNoiseMapGenerator
     public float Persistance = 0.286f;
     public float Lacunarity = 2.9f;
 
-    private readonly PerlinNoiseGenerator _perlinNoiseGenerator = new PerlinNoiseGenerator();  
-
     public float[,] Generate(
         int seed,
         int mapWidth,
@@ -50,7 +48,7 @@ public class PerlinNoiseMapGenerator
                 {
                     float sampleX = (x - halfWidth) / Scale * frequency + octaveOffsets[i].x;
                     float sampleY = (y - halfHeight) / Scale * frequency + octaveOffsets[i].y;
-                    float perlinValue = _perlinNoiseGenerator.Generate(sampleX, sampleY) * 2 - 1;
+                    float perlinValue = PerlinNoiseGenerator.Generate(sampleX, sampleY) * 2 - 1;
 
                     noiseHeight += perlinValue * amplitude;
                     amplitude *= Persistance;

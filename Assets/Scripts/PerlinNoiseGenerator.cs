@@ -8,9 +8,9 @@
 /// Based on the original implementation by Ken Perlin
 /// http://mrl.nyu.edu/~perlin/noise/
 /// </summary>
-public class PerlinNoiseGenerator
+public static class PerlinNoiseGenerator
 {
-    public float Generate(float x)
+    public static float Generate(float x)
     {
         var X = ((int)Mathf.Floor(x)) & 0xff;
         x -= Mathf.Floor(x);
@@ -18,7 +18,7 @@ public class PerlinNoiseGenerator
         return Lerp(u, Grad(perm[X], x), Grad(perm[X + 1], x - 1)) * 2;
     }
 
-    public float Generate(float x, float y)
+    public static float Generate(float x, float y)
     {
         var X = ((int)Mathf.Floor(x)) & 0xff;
         var Y = ((int)Mathf.Floor(y)) & 0xff;
@@ -32,32 +32,32 @@ public class PerlinNoiseGenerator
                         Lerp(u, Grad(perm[A + 1], x, y - 1), Grad(perm[B + 1], x - 1, y - 1)));
     }
 
-    public float Generate(Vector2 coord)
+    public static float Generate(Vector2 coord)
     {
         return Generate(coord.x, coord.y);
     }
 
-    private float Fade(float t)
+    private static float Fade(float t)
     {
         return t * t * t * (t * (t * 6 - 15) + 10);
     }
 
-    private float Lerp(float t, float a, float b)
+    private static float Lerp(float t, float a, float b)
     {
         return a + t * (b - a);
     }
 
-    private float Grad(int hash, float x)
+    private static float Grad(int hash, float x)
     {
         return (hash & 1) == 0 ? x : -x;
     }
 
-    private float Grad(int hash, float x, float y)
+    private static float Grad(int hash, float x, float y)
     {
         return ((hash & 1) == 0 ? x : -x) + ((hash & 2) == 0 ? y : -y);
     }
 
-    private float Grad(int hash, float x, float y, float z)
+    private static float Grad(int hash, float x, float y, float z)
     {
         var h = hash & 15;
         var u = h < 8 ? x : y;
