@@ -1,3 +1,6 @@
+using Newtonsoft.Json.Linq;
+using System;
+using System.Linq;
 using UnityEngine;
 
 public class Map : MonoBehaviour
@@ -9,6 +12,8 @@ public class Map : MonoBehaviour
     public float Scale = 25f;
     public float Persistance = 0.286f;
     public float Lacunarity = 2.9f;
+
+    public Texture2D Texture;   // Just for debugging purposes
 
     private PerlinNoiseMapGenerator _perlinNoiseMapGenerator = new PerlinNoiseMapGenerator();
     private float[,] _map;
@@ -34,6 +39,7 @@ public class Map : MonoBehaviour
             Seed,
             Width,
             Height);
+        Texture = CreateTexture2DFromNoiseMap(_map);
         CreateMapTiles();
     }
 
@@ -60,5 +66,30 @@ public class Map : MonoBehaviour
                 tile.transform.position = new Vector3(x, height / 2, y);
             }
         }
+    }
+
+    private Texture2D CreateTexture2DFromNoiseMap(float[,] noiseMap)
+    {
+        var width = noiseMap.GetUpperBound(0);
+        var height = noiseMap.GetUpperBound(1);
+        var texture = new Texture2D(width, height);
+        for (var x = 0; x < width; x++)
+        {
+            for(var y = 0; y < height; y++)
+            {
+                var posHeight = noiseMap[x, y];
+                var color = new Color(
+                    posHeight,
+                    posHeight,
+                    posHeight);
+                texture.SetPixel(
+                    x,
+                    y,
+                    color);
+            }
+        }
+
+        texture.Apply(false);
+        return texture;
     }
 }
