@@ -25,20 +25,58 @@ public class Map : MonoBehaviour
 
     public void Generate()
     {
+        var layersParentTransform = transform.Find("Layers");
+        if(layersParentTransform != null)
+        {
+            GameObject.DestroyImmediate(layersParentTransform.gameObject);
+        }
+        var layersParent = new GameObject("Layers");
+        layersParent.transform.SetParent(transform, false);
+
+        var layers = new Stack<float[,]>();
         var curHeight = 0f;
         for(int i = 0; i < Layers.Length; i++)
         {
             var layer = Layers[i];
+            if(!layer.Enabled)
+            {
+                continue;
+            }
+
             var perlinNoiseMapGenerator = new PerlinNoiseMapGenerator();
             perlinNoiseMapGenerator.Octaves = layer.Octaves;
             perlinNoiseMapGenerator.Scale = layer.Scale;
-            perlinNoiseMapGenerator.Offset = new Vector2(Width / 2, Depth / 2);
             perlinNoiseMapGenerator.Persistance = layer.Persistance;
             perlinNoiseMapGenerator.Lacunarity = layer.Lacunarity;
             var mapLayer = perlinNoiseMapGenerator.Generate(
-                Seed,
+                Seed + layers.Count,
                 Width,
                 Depth);
+
+            if (layers.Count > 0)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    for (int y = 0; y < Depth; y++)
+                    {
+                        var lowerHeight = layers.Peek()[x, y];
+                        if (lowerHeight < layer.LowerLayerThreshold)
+                        {
+                            mapLayer[x, y] = 0f;
+                        }
+                        else
+                        {
+                            mapLayer[x, y] -= layer.LowerLayerThreshold;
+                            if(mapLayer[x, y] < 0)
+                            {
+                                mapLayer[x, y] = 0f;
+                            }
+                        }
+                    }
+                }
+            }
+            layers.Push(mapLayer);
+
             var layerTiles = CreateMapTiles(
                 layer.Name,
                 mapLayer,
@@ -48,7 +86,8 @@ public class Map : MonoBehaviour
                 layer.Name,
                 layerTiles,
                 layer.Material,
-                null);
+                null,
+                layersParent.transform);
             curHeight += layer.MaxHeight;
         }
     }
@@ -71,7 +110,7 @@ public class Map : MonoBehaviour
             for(int y = 0; y < Depth; y++)
             {
                 var height = layer[x, y];
-                if(height >= minHeight)
+                if(height > 0)
                 {
                     var tile = GameObject.CreatePrimitive(PrimitiveType.Cube);
                     tile.name = $"Tile-{x}-{y}";
@@ -91,13 +130,14 @@ public class Map : MonoBehaviour
         string Name,
         List<GameObject> cells,
         Material material,
-        string tag)
+        string tag,
+        Transform parent)
     {
         var combineInstances = cells.Select(x => CreateCombineInstanceFromGameObject(x)).ToArray();
         cells.ForEach(x => DestroyImmediate(x));
 
         var combined = new GameObject(Name);
-        combined.transform.parent = transform;
+        combined.transform.parent = parent;
         var meshRenderer = combined.AddComponent<MeshRenderer>();
         meshRenderer.material = material;
         var meshFilter = combined.AddComponent<MeshFilter>();
