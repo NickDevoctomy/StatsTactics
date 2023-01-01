@@ -7,8 +7,9 @@ using UnityEngine;
 public class Map : MonoBehaviour
 {
     public int Seed;
-    public int Width;
-    public int Height;
+    public int Width = 32;
+    public int Depth = 24;
+    public float HeightScale = 2.0f;
 
     public MapLayer[] Layers;
 
@@ -31,13 +32,13 @@ public class Map : MonoBehaviour
             var perlinNoiseMapGenerator = new PerlinNoiseMapGenerator();
             perlinNoiseMapGenerator.Octaves = layer.Octaves;
             perlinNoiseMapGenerator.Scale = layer.Scale;
-            perlinNoiseMapGenerator.Offset = new Vector2(Width / 2, Height / 2);
+            perlinNoiseMapGenerator.Offset = new Vector2(Width / 2, Depth / 2);
             perlinNoiseMapGenerator.Persistance = layer.Persistance;
             perlinNoiseMapGenerator.Lacunarity = layer.Lacunarity;
             var mapLayer = perlinNoiseMapGenerator.Generate(
                 Seed,
                 Width,
-                Height);
+                Depth);
             var layerTiles = CreateMapTiles(
                 layer.Name,
                 mapLayer,
@@ -67,7 +68,7 @@ public class Map : MonoBehaviour
 
         for (int x = 0; x < Width; x++)
         {
-            for(int y = 0; y < Height; y++)
+            for(int y = 0; y < Depth; y++)
             {
                 var height = layer[x, y];
                 if(height >= minHeight)
@@ -107,7 +108,13 @@ public class Map : MonoBehaviour
         meshFilter.sharedMesh.CombineMeshes(combineInstances, true);
         var meshCollider = combined.AddComponent<MeshCollider>();
         meshCollider.sharedMesh = meshFilter.sharedMesh;
-        combined.tag = tag;
+
+        if(!string.IsNullOrEmpty(tag))
+        {
+            combined.tag = tag;
+        }
+
+        combined.transform.localScale = new Vector3(1f, HeightScale, 1f);
 
         combined.SetActive(true);
     }
