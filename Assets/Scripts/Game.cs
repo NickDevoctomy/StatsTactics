@@ -13,4 +13,12 @@ public class Game : MonoBehaviour
     {
         
     }
+
+    public void Initialise()
+    {
+        Randominator.Initialise(Seed);
+
+        var map = GetComponent<Map>();
+        map.Generate();
+    }
 }
