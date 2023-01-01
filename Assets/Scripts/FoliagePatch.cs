@@ -77,21 +77,21 @@ public class FoliagePatch : MonoBehaviour
         }    
     }
 
-    //private void OnDrawGizmosSelected()
-    //{
-    //    Gizmos.color = Color.white;
-    //    Gizmos.DrawWireSphere(transform.position, Radius);
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(transform.position, Radius);
 
-    //    var affectedCells = Physics.OverlapSphere(transform.position, Radius);
-    //    var cells = affectedCells
-    //        .Where(x => x.gameObject.tag == "MapCell")
-    //        .Select(y => y.gameObject)
-    //        .Where(x => x.GetComponent<MapCell>().LayerName == TerrainLayerName)
-    //        .ToArray();
-    //    foreach (var curCell in cells)
-    //    {
-    //        Gizmos.color = Color.red;
-    //        Gizmos.DrawSphere(curCell.transform.position, 0.05f);
-    //    }
-    //}
+        var affectedCells = Physics.OverlapSphere(transform.position, Radius);
+        var cells = affectedCells
+            .Where(x => x.gameObject.tag == "MapCell")
+            .Select(y => y.gameObject)
+            .Where(x => x.GetComponent<MapCell>().LayerName == TerrainLayerName)
+            .ToArray();
+        foreach (var curCell in cells)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(curCell.transform.position, 0.05f);
+        }
+    }
 }

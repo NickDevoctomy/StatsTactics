@@ -22,6 +22,11 @@ public class Randominator
         return _random.Next();
     }
 
+    public int Next(int min, int max)
+    {
+        return _random.Next(min, max);
+    }
+
     public static void Initialise(string seed)
     {
         _instance = new Randominator(seed);

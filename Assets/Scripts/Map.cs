@@ -10,12 +10,11 @@ public class Map : MonoBehaviour
     public int Width = 32;
     public int Depth = 24;
     public TerrainLayer[] TerrainLayers;
-    public FoligaeLayer[] FoliageLayers;
-
-    public bool ShowFinalHeightMapGizmos = true;
+    public PatchLayer[] PatchLayers;
 
     private MapCellInfo[,] _mapInfo;
     private List<GameObject> _mapCells;
+    private Dictionary<string, List<GameObject>> _foliagePatches;
 
     void Start()
     {
@@ -105,6 +104,7 @@ public class Map : MonoBehaviour
         }
 
         GenerateMapCells();
+        GeneratePatches();
     }
     private void GenerateMapCells()
     {
@@ -134,6 +134,48 @@ public class Map : MonoBehaviour
                 cell.LayerName = _mapInfo[x, y].LayerName;
                 _mapCells.Add(mapCell);
             }
+        }
+    }
+
+    private void GeneratePatches()
+    {
+        var patchesParentTransform = transform.Find("Patches");
+        if (patchesParentTransform != null)
+        {
+            GameObject.DestroyImmediate(patchesParentTransform.gameObject);
+        }
+        var patchesParent = new GameObject("Patches");
+        patchesParent.transform.SetParent(transform, false);
+
+        _foliagePatches = new Dictionary<string, List<GameObject>>();
+
+        foreach (var curPatchLayer in PatchLayers)
+        {
+            var layerParent = new GameObject(curPatchLayer.Name);
+            layerParent.transform.SetParent(patchesParent.transform, false);
+
+            var patchCount = Randominator.Instance.Next(
+                curPatchLayer.MinPatchCount,
+                curPatchLayer.MaxPatchCount);
+            var patches = new List<GameObject>();
+            while(patches.Count < patchCount)
+            {
+                var allSuitableCells = _mapCells
+                    .Where(x => x.GetComponent<MapCell>().LayerName == curPatchLayer.TerrainLayerName)
+                    .ToArray();
+                var randomCell = allSuitableCells[Randominator.Instance.Next(0, allSuitableCells.Length)];
+                var patch = GameObject.Instantiate(
+                    curPatchLayer.PatchPrefab,
+                    randomCell.transform.position,
+                    Quaternion.identity,
+                    layerParent.transform);
+                patch.name = $"Patch-{patches.Count}";
+                patches.Add(patch);
+            }
+
+            _foliagePatches.Add(
+                curPatchLayer.Name,
+                patches);
         }
     }
 
