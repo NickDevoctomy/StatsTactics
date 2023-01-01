@@ -9,7 +9,23 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5462263298515512567, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
       propertyPath: Radius
-      value: 1
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5462263298515512567, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: MaxScale
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5462263298515512567, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: MinScale
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5462263298515512567, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: MaxInstanceCount
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 5462263298515512567, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: MinInstanceCount
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5462263298515512567, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
       propertyPath: TerrainLayerName

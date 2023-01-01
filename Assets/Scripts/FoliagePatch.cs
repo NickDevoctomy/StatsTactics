@@ -35,25 +35,14 @@ public class FoliagePatch : MonoBehaviour
 
     private void CreateInstances()
     {
-        _instances.ForEach(x => x.SetActive(false));    // Disable all existing
-
-        if (_instances.Count > _prefabInstanceCount)
+        while (_instances.Count < _prefabInstanceCount)
         {
-            // Destroy superfluous instances
-            while (_instances.Count > _prefabInstanceCount)
-            {
-                GameObject.DestroyImmediate(_instances[0].gameObject);
-                _instances.RemoveAt(0);
-            }
-        }
-        else
-        {
-            while (_instances.Count < _prefabInstanceCount)
-            {
-                var instance = GameObject.Instantiate(FoliagePrefabs[0]);  // pick random one each time here
-                instance.SetActive(false);
-                _instances.Add(instance);
-            }
+            var instance = GameObject.Instantiate(
+                FoliagePrefabs[0],
+                transform);  // pick random one each time here
+            instance.name = $"FoliageInstance";
+            instance.SetActive(false);
+            _instances.Add(instance);
         }
     }
 
@@ -82,23 +71,27 @@ public class FoliagePatch : MonoBehaviour
                 curInstance.SetActive(true);
             }
         }
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.white;
-        Gizmos.DrawWireSphere(transform.position, Radius);
-
-        var affectedCells = Physics.OverlapSphere(transform.position, Radius);
-        var cells = affectedCells
-            .Where(x => x.gameObject.tag == "MapCell")
-            .Select(y => y.gameObject)
-            .Where(x => x.GetComponent<MapCell>().LayerName == TerrainLayerName)
-            .ToArray();
-        foreach (var curCell in cells)
+        else
         {
-            Gizmos.color = Color.red;
-            Gizmos.DrawSphere(curCell.transform.position, 0.05f);
-        }
+            _instances.ForEach(x => x.SetActive(false));
+        }    
     }
+
+    //private void OnDrawGizmosSelected()
+    //{
+    //    Gizmos.color = Color.white;
+    //    Gizmos.DrawWireSphere(transform.position, Radius);
+
+    //    var affectedCells = Physics.OverlapSphere(transform.position, Radius);
+    //    var cells = affectedCells
+    //        .Where(x => x.gameObject.tag == "MapCell")
+    //        .Select(y => y.gameObject)
+    //        .Where(x => x.GetComponent<MapCell>().LayerName == TerrainLayerName)
+    //        .ToArray();
+    //    foreach (var curCell in cells)
+    //    {
+    //        Gizmos.color = Color.red;
+    //        Gizmos.DrawSphere(curCell.transform.position, 0.05f);
+    //    }
+    //}
 }

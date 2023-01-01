@@ -2,13 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Map : MonoBehaviour
 {
     public GameObject MapCellPrefab;
 
-    public string Seed = "Hello";
     public int Width = 32;
     public int Depth = 24;
     public TerrainLayer[] TerrainLayers;
@@ -56,7 +54,7 @@ public class Map : MonoBehaviour
             perlinNoiseMapGenerator.Persistance = layer.Persistance;
             perlinNoiseMapGenerator.Lacunarity = layer.Lacunarity;
             var mapLayer = perlinNoiseMapGenerator.Generate(
-                Seed + layers.Count,
+                Randominator.Instance.Next(),
                 Width,
                 Depth);
 
