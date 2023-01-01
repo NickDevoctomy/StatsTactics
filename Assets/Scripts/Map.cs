@@ -109,7 +109,6 @@ public class Map : MonoBehaviour
                 var height = layer[x, y];
                 if(height > 0)
                 {
-                    //var floorHeight = lowerLayer[x, y];
                     var tile = GameObject.CreatePrimitive(PrimitiveType.Cube);
                     tile.name = Guid.NewGuid().ToString();
                     height = Math.Clamp(height, 0f, maxHeight);
