@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Map : MonoBehaviour
 {
@@ -13,7 +12,7 @@ public class Map : MonoBehaviour
 
     public bool ShowFinalHeightMapGizmos = true;
 
-    private float[,] _finalHeightMap;
+    private MapCellInfo[,] _mapInfo;
 
     void Start()
     {
@@ -27,14 +26,14 @@ public class Map : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if(ShowFinalHeightMapGizmos && _finalHeightMap != null && _finalHeightMap.Length > 0)
+        if(ShowFinalHeightMapGizmos && _mapInfo != null && _mapInfo.Length > 0)
         {
-            Gizmos.color = Color.red;
             for (int x = 0; x < Width; x++)
             {
                 for (int y = 0; y < Depth; y++)
                 {
-                    Gizmos.DrawSphere(new Vector3(x, _finalHeightMap[x, y], y), 0.05f);
+                    Gizmos.color = _mapInfo[x, y].Color;
+                    Gizmos.DrawSphere(new Vector3(x, _mapInfo[x, y].Height, y), 0.05f);
                 }
             }
         }
@@ -50,7 +49,7 @@ public class Map : MonoBehaviour
         var layersParent = new GameObject("Layers");
         layersParent.transform.SetParent(transform, false);
 
-        _finalHeightMap = new float[Width, Depth];
+        _mapInfo = new MapCellInfo[Width, Depth];
         var layers = new Stack<float[,]>();
         for(int i = 0; i < Layers.Length; i++)
         {
@@ -92,7 +91,7 @@ public class Map : MonoBehaviour
             var layerTiles = CreateMapTiles(
                 layer.Name,
                 mapLayer,
-                _finalHeightMap,
+                _mapInfo,
                 layer.MaxHeight);
             MergeCells(
                 layer.Name,
@@ -107,7 +106,12 @@ public class Map : MonoBehaviour
                 for (int y = 0; y < Depth; y++)
                 {
                     var height = mapLayer[x, y];
-                    _finalHeightMap[x, y] += height > layer.MaxHeight ? layer.MaxHeight : height;
+                    _mapInfo[x, y].Height += height > layer.MaxHeight ? layer.MaxHeight : height;
+                    if(height > 0)
+                    {
+                        _mapInfo[x, y].LayerName = layer.Name;
+                        _mapInfo[x, y].Color = layer.InfoColor;
+                    }
                 }
             }
         }
@@ -116,7 +120,7 @@ public class Map : MonoBehaviour
     private List<GameObject> CreateMapTiles(
         string layerName,
         float[,] layer,
-        float[,] lowerLayer,
+        MapCellInfo[,] mapInfo,
         float maxHeight)
     {
         var layerTiles = new List<GameObject>();
@@ -138,7 +142,7 @@ public class Map : MonoBehaviour
                     height = Math.Clamp(height, 0f, maxHeight);
                     tile.transform.SetParent(transform, false);
                     tile.transform.localScale = new Vector3(1, height, 1);
-                    tile.transform.position = new Vector3(x, height / 2 + lowerLayer[x, y], y);
+                    tile.transform.position = new Vector3(x, height / 2 + mapInfo[x, y].Height, y);
                     layerTiles.Add(tile);
                 }
             }

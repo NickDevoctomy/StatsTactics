@@ -13,4 +13,5 @@ public struct MapLayer
     public float LowerLayerThreshold;
     public float MaxHeight;
     public Material Material;
+    public Color InfoColor;
 }
