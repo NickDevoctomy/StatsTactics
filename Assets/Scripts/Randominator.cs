@@ -27,6 +27,13 @@ public class Randominator
         return _random.Next(min, max);
     }
 
+    public float Next(float min, float max)
+    {
+        var ratio = (float)_random.NextDouble();
+        var total = max - min;
+        return min + (total * ratio);
+    }
+
     public static void Initialise(string seed)
     {
         _instance = new Randominator(seed);

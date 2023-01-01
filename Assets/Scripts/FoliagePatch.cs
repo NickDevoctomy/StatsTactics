@@ -59,15 +59,17 @@ public class FoliagePatch : MonoBehaviour
             foreach (var curInstance in _instances)
             {
                 var cell = cells[Random.Range(0, cells.Length)];
-                var scale = Random.Range(MinScale, MaxScale);
+                var rotation = Randominator.Instance.Next(0, 360);
+                curInstance.transform.localRotation = Quaternion.Euler(0, rotation, 0);
+                var scale = Randominator.Instance.Next(MinScale, MaxScale);
                 curInstance.transform.localScale = new Vector3(
                     scale,
                     scale,
                     scale);
                 curInstance.transform.position = new Vector3(
-                    cell.transform.position.x + Random.Range(-0.5f, 0.5f),
+                    cell.transform.position.x + Randominator.Instance.Next(-0.5f, 0.5f),
                     cell.transform.position.y,
-                    cell.transform.position.z + Random.Range(-0.5f, 0.5f));
+                    cell.transform.position.z + Randominator.Instance.Next(-0.5f, 0.5f));
                 curInstance.SetActive(true);
             }
         }
