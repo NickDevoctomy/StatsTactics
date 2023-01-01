@@ -8,7 +8,8 @@ public class Map : MonoBehaviour
     public string Seed = "Hello";
     public int Width = 32;
     public int Depth = 24;
-    public MapLayer[] Layers;
+    public TerrainLayer[] TerrainLayers;
+    public FoligaeLayer[] FoliageLayers;
 
     public bool ShowFinalHeightMapGizmos = true;
 
@@ -51,9 +52,9 @@ public class Map : MonoBehaviour
 
         _mapInfo = new MapCellInfo[Width, Depth];
         var layers = new Stack<float[,]>();
-        for(int i = 0; i < Layers.Length; i++)
+        for(int i = 0; i < TerrainLayers.Length; i++)
         {
-            var layer = Layers[i];
+            var layer = TerrainLayers[i];
             if(!layer.Enabled)
             {
                 continue;
