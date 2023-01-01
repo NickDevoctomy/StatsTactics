@@ -9,7 +9,6 @@ public class Map : MonoBehaviour
     public int Seed;
     public int Width = 32;
     public int Depth = 24;
-    public float HeightScale = 2.0f;
 
     public MapLayer[] Layers;
 
@@ -33,8 +32,8 @@ public class Map : MonoBehaviour
         var layersParent = new GameObject("Layers");
         layersParent.transform.SetParent(transform, false);
 
+        var combinedLowerLayers = new float[Width, Depth];
         var layers = new Stack<float[,]>();
-        var curHeight = 0f;
         for(int i = 0; i < Layers.Length; i++)
         {
             var layer = Layers[i];
@@ -43,6 +42,7 @@ public class Map : MonoBehaviour
                 continue;
             }
 
+            // create our current noise layer
             var perlinNoiseMapGenerator = new PerlinNoiseMapGenerator();
             perlinNoiseMapGenerator.Octaves = layer.Octaves;
             perlinNoiseMapGenerator.Scale = layer.Scale;
@@ -53,25 +53,23 @@ public class Map : MonoBehaviour
                 Width,
                 Depth);
 
-            if (layers.Count > 0)
+            var lowerLayer = layers.Count > 0 ? layers.Peek() : null;
+            if (lowerLayer != null)
             {
+                // compare with layer below and only keep anything above lower layer threshold
                 for (int x = 0; x < Width; x++)
                 {
                     for (int y = 0; y < Depth; y++)
                     {
-                        var lowerHeight = layers.Peek()[x, y];
+                        var lowerHeight = lowerLayer[x, y];
                         if (lowerHeight < layer.LowerLayerThreshold)
                         {
                             mapLayer[x, y] = 0f;
                         }
-                        else
-                        {
-                            mapLayer[x, y] -= layer.LowerLayerThreshold;
-                            if(mapLayer[x, y] < 0)
-                            {
-                                mapLayer[x, y] = 0f;
-                            }
-                        }
+
+                        // combine lower layer with previous lower layers so we know how high
+                        // this cell is
+                        combinedLowerLayers[x, y] += lowerHeight > Layers[i - 1].MaxHeight ? Layers[i - 1].MaxHeight : lowerHeight;
                     }
                 }
             }
@@ -80,7 +78,7 @@ public class Map : MonoBehaviour
             var layerTiles = CreateMapTiles(
                 layer.Name,
                 mapLayer,
-                curHeight,
+                combinedLowerLayers,
                 layer.MaxHeight);
             MergeCells(
                 layer.Name,
@@ -88,14 +86,13 @@ public class Map : MonoBehaviour
                 layer.Material,
                 null,
                 layersParent.transform);
-            curHeight += layer.MaxHeight;
         }
     }
 
     private List<GameObject> CreateMapTiles(
         string layerName,
         float[,] layer,
-        float minHeight,
+        float[,] lowerLayer,
         float maxHeight)
     {
         var layerTiles = new List<GameObject>();
@@ -112,12 +109,13 @@ public class Map : MonoBehaviour
                 var height = layer[x, y];
                 if(height > 0)
                 {
+                    //var floorHeight = lowerLayer[x, y];
                     var tile = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                    tile.name = $"Tile-{x}-{y}";
-                    height = Math.Clamp(height, minHeight, maxHeight);
+                    tile.name = Guid.NewGuid().ToString();
+                    height = Math.Clamp(height, 0f, maxHeight);
                     tile.transform.SetParent(transform, false);
                     tile.transform.localScale = new Vector3(1, height, 1);
-                    tile.transform.position = new Vector3(x, height / 2 + minHeight, y);
+                    tile.transform.position = new Vector3(x, height / 2 + lowerLayer[x, y], y);
                     layerTiles.Add(tile);
                 }
             }
@@ -153,8 +151,6 @@ public class Map : MonoBehaviour
         {
             combined.tag = tag;
         }
-
-        combined.transform.localScale = new Vector3(1f, HeightScale, 1f);
 
         combined.SetActive(true);
     }
