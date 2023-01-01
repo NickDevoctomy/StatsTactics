@@ -22,12 +22,16 @@ public class Randominator
         return _random.Next();
     }
 
-    public int Next(int min, int max)
+    public int Next(
+        int min,
+        int max)
     {
         return _random.Next(min, max);
     }
 
-    public float Next(float min, float max)
+    public float Next(
+        float min,
+        float max)
     {
         var ratio = (float)_random.NextDouble();
         var total = max - min;
