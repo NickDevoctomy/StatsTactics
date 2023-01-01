@@ -20,7 +20,7 @@ public class FoliagePatch : MonoBehaviour
    
     void Start()
     {
-        _prefabInstanceCount = Random.Range(MinInstanceCount, MaxInstanceCount);
+        _prefabInstanceCount = Randominator.Instance.Next(MinInstanceCount, MaxInstanceCount);
         CreateInstances();
     }
 
@@ -58,7 +58,7 @@ public class FoliagePatch : MonoBehaviour
         {
             foreach (var curInstance in _instances)
             {
-                var cell = cells[Random.Range(0, cells.Length)];
+                var cell = cells[Randominator.Instance.Next(0, cells.Length)];
                 var rotation = Randominator.Instance.Next(0, 360);
                 curInstance.transform.localRotation = Quaternion.Euler(0, rotation, 0);
                 var scale = Randominator.Instance.Next(MinScale, MaxScale);

@@ -1,3 +1,6 @@
+using System.Threading;
+using UnityEngine;
+
 public class Randominator
 {
     public static Randominator Instance
@@ -11,6 +14,7 @@ public class Randominator
     private static Randominator _instance;
 
     private System.Random _random;
+    private int _index;
 
     private Randominator(string seed)
     {
@@ -19,14 +23,18 @@ public class Randominator
 
     public int Next()
     {
-        return _random.Next();
+        var value = _random.Next();
+        //Debug.Log($"{Interlocked.Increment(ref _index)} :: {value}");
+        return value;
     }
 
     public int Next(
         int min,
         int max)
     {
-        return _random.Next(min, max);
+        var value = _random.Next(min, max);
+        //Debug.Log($"{Interlocked.Increment(ref _index)} :: {value}");
+        return value;
     }
 
     public float Next(
@@ -35,7 +43,9 @@ public class Randominator
     {
         var ratio = (float)_random.NextDouble();
         var total = max - min;
-        return min + (total * ratio);
+        var value = min + (total * ratio);
+        //Debug.Log($"{Interlocked.Increment(ref _index)} :: {value}");
+        return value;
     }
 
     public static void Initialise(string seed)

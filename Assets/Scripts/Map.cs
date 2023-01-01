@@ -18,7 +18,6 @@ public class Map : MonoBehaviour
 
     void Start()
     {
-        Generate();
     }
 
     void Update()
@@ -52,8 +51,10 @@ public class Map : MonoBehaviour
             perlinNoiseMapGenerator.Scale = layer.Scale;
             perlinNoiseMapGenerator.Persistance = layer.Persistance;
             perlinNoiseMapGenerator.Lacunarity = layer.Lacunarity;
+            var seed = Randominator.Instance.Next();
+            Debug.Log($"{layer.Name} Seed :: {seed}");
             var mapLayer = perlinNoiseMapGenerator.Generate(
-                Randominator.Instance.Next(),
+                seed,
                 Width,
                 Depth);
 
