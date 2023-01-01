@@ -2,9 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Map : MonoBehaviour
 {
+    public GameObject MapCellPrefab;
+
     public string Seed = "Hello";
     public int Width = 32;
     public int Depth = 24;
@@ -14,6 +17,7 @@ public class Map : MonoBehaviour
     public bool ShowFinalHeightMapGizmos = true;
 
     private MapCellInfo[,] _mapInfo;
+    private List<GameObject> _mapCells;
 
     void Start()
     {
@@ -23,21 +27,6 @@ public class Map : MonoBehaviour
     void Update()
     {
         
-    }
-
-    private void OnDrawGizmos()
-    {
-        if(ShowFinalHeightMapGizmos && _mapInfo != null && _mapInfo.Length > 0)
-        {
-            for (int x = 0; x < Width; x++)
-            {
-                for (int y = 0; y < Depth; y++)
-                {
-                    Gizmos.color = _mapInfo[x, y].Color;
-                    Gizmos.DrawSphere(new Vector3(x, _mapInfo[x, y].Height, y), 0.05f);
-                }
-            }
-        }
     }
 
     public void Generate()
@@ -114,6 +103,38 @@ public class Map : MonoBehaviour
                         _mapInfo[x, y].Color = layer.InfoColor;
                     }
                 }
+            }
+        }
+
+        GenerateMapCells();
+    }
+    private void GenerateMapCells()
+    {
+        var callsParentTransform = transform.Find("Cells");
+        if (callsParentTransform != null)
+        {
+            GameObject.DestroyImmediate(callsParentTransform.gameObject);
+        }
+        var cellsParent = new GameObject("Cells");
+        cellsParent.transform.SetParent(transform, false);
+
+        _mapCells = new List<GameObject>();
+        for (int x = 0; x < Width; x++)
+        {
+            for (int y = 0; y < Depth; y++)
+            {
+                var mapCell = GameObject.Instantiate(
+                    MapCellPrefab,
+                    new Vector3(x, _mapInfo[x, y].Height, y),
+                    Quaternion.identity,
+                    cellsParent.transform);
+                mapCell.name = $"Cell-{x}_{y}";
+                var cell = mapCell.GetComponent<MapCell>();
+                cell.X = x;
+                cell.Y = y;
+                cell.Color = _mapInfo[x, y].Color;
+                cell.LayerName = _mapInfo[x, y].LayerName;
+                _mapCells.Add(mapCell);
             }
         }
     }
