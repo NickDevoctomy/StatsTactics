@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &4203667986368044014
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5462263298515512567, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: Radius
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5462263298515512567, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: TerrainLayerName
+      value: Grass
+      objectReference: {fileID: 0}
+    - target: {fileID: 5462263298515512567, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: FoliagePrefabs.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5462263298515512567, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: FoliagePrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 100000, guid: 2a1cff6350bc4824482abd42d77e4e04, type: 3}
+    - target: {fileID: 5462263298515512567, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: FoliagePrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 100000, guid: f00e2604c5b6aff4b850385e11a18995, type: 3}
+    - target: {fileID: 5462263298515512567, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: FoliagePrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 100000, guid: 4f65142df99234249aecca42227457dd, type: 3}
+    - target: {fileID: 8060348746302389244, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8060348746302389244, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8060348746302389244, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8060348746302389244, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8060348746302389244, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8060348746302389244, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8060348746302389244, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8060348746302389244, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8060348746302389244, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8060348746302389244, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8060348746302389244, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8697507341008290387, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: m_Name
+      value: GrassPatch Variant
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
