@@ -2,14 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Map : MonoBehaviour
 {
     public string Seed = "Hello";
     public int Width = 32;
     public int Depth = 24;
-
     public MapLayer[] Layers;
+
+    public bool ShowFinalHeightMapGizmos = true;
+
+    private float[,] _finalHeightMap;
 
     void Start()
     {
@@ -19,6 +23,21 @@ public class Map : MonoBehaviour
     void Update()
     {
         
+    }
+
+    private void OnDrawGizmos()
+    {
+        if(ShowFinalHeightMapGizmos && _finalHeightMap != null && _finalHeightMap.Length > 0)
+        {
+            Gizmos.color = Color.red;
+            for (int x = 0; x < Width; x++)
+            {
+                for (int y = 0; y < Depth; y++)
+                {
+                    Gizmos.DrawSphere(new Vector3(x, _finalHeightMap[x, y], y), 0.05f);
+                }
+            }
+        }
     }
 
     public void Generate()
@@ -31,7 +50,7 @@ public class Map : MonoBehaviour
         var layersParent = new GameObject("Layers");
         layersParent.transform.SetParent(transform, false);
 
-        var combinedLowerLayers = new float[Width, Depth];
+        _finalHeightMap = new float[Width, Depth];
         var layers = new Stack<float[,]>();
         for(int i = 0; i < Layers.Length; i++)
         {
@@ -65,10 +84,6 @@ public class Map : MonoBehaviour
                         {
                             mapLayer[x, y] = 0f;
                         }
-
-                        // combine lower layer with previous lower layers so we know how high
-                        // this cell is
-                        combinedLowerLayers[x, y] += lowerHeight > Layers[i - 1].MaxHeight ? Layers[i - 1].MaxHeight : lowerHeight;
                     }
                 }
             }
@@ -77,7 +92,7 @@ public class Map : MonoBehaviour
             var layerTiles = CreateMapTiles(
                 layer.Name,
                 mapLayer,
-                combinedLowerLayers,
+                _finalHeightMap,
                 layer.MaxHeight);
             MergeCells(
                 layer.Name,
@@ -85,6 +100,16 @@ public class Map : MonoBehaviour
                 layer.Material,
                 null,
                 layersParent.transform);
+
+            // combine lower layer with previous lower layers so we know how high
+            for (int x = 0; x < Width; x++)
+            {
+                for (int y = 0; y < Depth; y++)
+                {
+                    var height = mapLayer[x, y];
+                    _finalHeightMap[x, y] += height > layer.MaxHeight ? layer.MaxHeight : height;
+                }
+            }
         }
     }
 
