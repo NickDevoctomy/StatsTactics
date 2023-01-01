@@ -46,7 +46,7 @@ public class Map : MonoBehaviour
             MergeCells(
                 layer.Name,
                 layerTiles,
-                null,
+                layer.Material,
                 null);
             curHeight += layer.MaxHeight;
         }

@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 [Serializable]
 public struct MapLayer
@@ -9,4 +10,5 @@ public struct MapLayer
     public float Persistance;
     public float Lacunarity;
     public float MaxHeight;
+    public Material Material;
 }
