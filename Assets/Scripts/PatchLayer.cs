@@ -9,4 +9,5 @@ public class PatchLayer
     public GameObject PatchPrefab;
     public int MinPatchCount = 1;
     public int MaxPatchCount = 1;
+    public float MinDistanceBetweenPatches = 1f;
 }

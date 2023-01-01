@@ -164,6 +164,17 @@ public class Map : MonoBehaviour
                     .Where(x => x.GetComponent<MapCell>().LayerName == curPatchLayer.TerrainLayerName)
                     .ToArray();
                 var randomCell = allSuitableCells[Randominator.Instance.Next(0, allSuitableCells.Length)];
+                var patchesWithinMinDistance = patches
+                    .Where(x => Vector3.Distance(randomCell.transform.position, x.transform.position) < curPatchLayer.MinDistanceBetweenPatches)
+                    .ToArray();
+                while(patchesWithinMinDistance.Count() > 0)
+                {
+                    randomCell = allSuitableCells[Randominator.Instance.Next(0, allSuitableCells.Length)];
+                    patchesWithinMinDistance = patches
+                        .Where(x => Vector3.Distance(randomCell.transform.position, x.transform.position) < curPatchLayer.MinDistanceBetweenPatches)
+                        .ToArray();
+                }
+
                 var patch = GameObject.Instantiate(
                     curPatchLayer.PatchPrefab,
                     randomCell.transform.position,
