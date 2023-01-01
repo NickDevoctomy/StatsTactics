@@ -17,12 +17,12 @@ public class PerlinNoiseMapGenerator
     public float Lacunarity = 2.9f;
 
     public float[,] Generate(
-        int seed,
+        string seed,
         int mapWidth,
         int mapHeight)
     {
         var noiseMap = new float[mapWidth, mapHeight];
-        var random = new System.Random(seed);
+        var random = new System.Random(seed.GetHashCode());
 
         Vector2[] octaveOffsets = new Vector2[Octaves];
         for (int i = 0; i < Octaves; i++)

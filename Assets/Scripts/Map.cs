@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Map : MonoBehaviour
 {
-    public int Seed;
+    public string Seed = "Hello";
     public int Width = 32;
     public int Depth = 24;
 
