@@ -1,5 +1,6 @@
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -8,16 +9,9 @@ public class Map : MonoBehaviour
     public int Seed;
     public int Width;
     public int Height;
-    public int Octaves = 5;
-    public float Scale = 25f;
-    public float Persistance = 0.286f;
-    public float Lacunarity = 2.9f;
 
-    public Texture2D Texture;   // Just for debugging purposes
+    public MapLayer[] Layers;
 
-    private PerlinNoiseMapGenerator _perlinNoiseMapGenerator = new PerlinNoiseMapGenerator();
-    private float[,] _map;
-    
     void Start()
     {
         Generate();
@@ -30,66 +24,101 @@ public class Map : MonoBehaviour
 
     public void Generate()
     {
-        _perlinNoiseMapGenerator.Octaves = Octaves;
-        _perlinNoiseMapGenerator.Scale = Scale;
-        _perlinNoiseMapGenerator.Offset = new Vector2(Width / 2, Height / 2);
-        _perlinNoiseMapGenerator.Persistance = Persistance;
-        _perlinNoiseMapGenerator.Lacunarity = Lacunarity;
-        _map = _perlinNoiseMapGenerator.Generate(
-            Seed,
-            Width,
-            Height);
-        Texture = CreateTexture2DFromNoiseMap(_map);
-        CreateMapTiles();
+        var curHeight = 0f;
+        for(int i = 0; i < Layers.Length; i++)
+        {
+            var layer = Layers[i];
+            var perlinNoiseMapGenerator = new PerlinNoiseMapGenerator();
+            perlinNoiseMapGenerator.Octaves = layer.Octaves;
+            perlinNoiseMapGenerator.Scale = layer.Scale;
+            perlinNoiseMapGenerator.Offset = new Vector2(Width / 2, Height / 2);
+            perlinNoiseMapGenerator.Persistance = layer.Persistance;
+            perlinNoiseMapGenerator.Lacunarity = layer.Lacunarity;
+            var mapLayer = perlinNoiseMapGenerator.Generate(
+                Seed,
+                Width,
+                Height);
+            var layerTiles = CreateMapTiles(
+                layer.Name,
+                mapLayer,
+                curHeight,
+                layer.MaxHeight);
+            MergeCells(
+                layer.Name,
+                layerTiles,
+                null,
+                null);
+            curHeight += layer.MaxHeight;
+        }
     }
 
-    private void CreateMapTiles()
+    private List<GameObject> CreateMapTiles(
+        string layerName,
+        float[,] layer,
+        float minHeight,
+        float maxHeight)
     {
-        var tilesParentTransform = transform.Find("Tiles");
+        var layerTiles = new List<GameObject>();
+        var tilesParentTransform = transform.Find(layerName);
         if (tilesParentTransform != null)
         {
             GameObject.DestroyImmediate(tilesParentTransform.gameObject);
         }
 
-        var tilesParent = new GameObject("Tiles");
-        tilesParent.transform.parent = transform;
-
         for (int x = 0; x < Width; x++)
         {
             for(int y = 0; y < Height; y++)
             {
-                var tile = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                tile.name = $"Tile-{x}-{y}";
-                tile.transform.SetParent(tilesParent.transform, false);
-                var height = 1 + (1 * _map[x, y]);
-                tile.transform.localScale = new Vector3(1, height, 1);
-                tile.transform.position = new Vector3(x, height / 2, y);
+                var height = layer[x, y];
+                if(height >= minHeight)
+                {
+                    var tile = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                    tile.name = $"Tile-{x}-{y}";
+                    height = Math.Clamp(height, minHeight, maxHeight);
+                    tile.transform.SetParent(transform, false);
+                    tile.transform.localScale = new Vector3(1, height, 1);
+                    tile.transform.position = new Vector3(x, height / 2 + minHeight, y);
+                    layerTiles.Add(tile);
+                }
             }
         }
+
+        return layerTiles;
     }
 
-    private Texture2D CreateTexture2DFromNoiseMap(float[,] noiseMap)
+    private void MergeCells(
+        string Name,
+        List<GameObject> cells,
+        Material material,
+        string tag)
     {
-        var width = noiseMap.GetUpperBound(0);
-        var height = noiseMap.GetUpperBound(1);
-        var texture = new Texture2D(width, height);
-        for (var x = 0; x < width; x++)
-        {
-            for(var y = 0; y < height; y++)
-            {
-                var posHeight = noiseMap[x, y];
-                var color = new Color(
-                    posHeight,
-                    posHeight,
-                    posHeight);
-                texture.SetPixel(
-                    x,
-                    y,
-                    color);
-            }
-        }
+        var combineInstances = cells.Select(x => CreateCombineInstanceFromGameObject(x)).ToArray();
+        cells.ForEach(x => DestroyImmediate(x));
 
-        texture.Apply(false);
-        return texture;
+        var combined = new GameObject(Name);
+        combined.transform.parent = transform;
+        var meshRenderer = combined.AddComponent<MeshRenderer>();
+        meshRenderer.material = material;
+        var meshFilter = combined.AddComponent<MeshFilter>();
+        meshFilter.sharedMesh = new Mesh
+        {
+            indexFormat = UnityEngine.Rendering.IndexFormat.UInt32
+        };
+        meshFilter.sharedMesh.CombineMeshes(combineInstances, true);
+        var meshCollider = combined.AddComponent<MeshCollider>();
+        meshCollider.sharedMesh = meshFilter.sharedMesh;
+        combined.tag = tag;
+
+        combined.SetActive(true);
+    }
+
+    private CombineInstance CreateCombineInstanceFromGameObject(GameObject gameObject)
+    {
+        var meshFilter = gameObject.GetComponent<MeshFilter>();
+        return new CombineInstance
+        {
+            mesh = meshFilter.sharedMesh,
+            transform = gameObject.transform.localToWorldMatrix
+        };
     }
 }
