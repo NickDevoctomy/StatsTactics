@@ -52,7 +52,7 @@ public class FoliagePatch : MonoBehaviour
         var cells = affectedCells
             .Where(x => x.gameObject.tag == "MapCell")
             .Select(y => y.gameObject)
-            .Where(x => TerrainLayerName.Contains(x.GetComponent<MapCell>().LayerName))
+            .Where(x => x.GetComponent<MapCell>().LayerName != null && TerrainLayerName.Contains(x.GetComponent<MapCell>().LayerName))
             .ToArray();
         if(cells.Length > 0)
         {

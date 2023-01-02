@@ -1,0 +1,131 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &5800826629292638303
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5462263298515512567, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: Radius
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5462263298515512567, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: MaxScale
+      value: 0.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 5462263298515512567, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: MinScale
+      value: 0.075
+      objectReference: {fileID: 0}
+    - target: {fileID: 5462263298515512567, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: MaxInstanceCount
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5462263298515512567, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: MinInstanceCount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5462263298515512567, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: TerrainLayerName
+      value: Sand,Mud,Grass,DeepGrass,Rock
+      objectReference: {fileID: 0}
+    - target: {fileID: 5462263298515512567, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: FoliagePrefabs.Array.size
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 5462263298515512567, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: FoliagePrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 128935683, guid: 8d931b3fb82717949a490ba2479926c4, type: 3}
+    - target: {fileID: 5462263298515512567, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: FoliagePrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 2023517905, guid: 1d7cf80ff985b3d4da86a46d77ed1a1e, type: 3}
+    - target: {fileID: 5462263298515512567, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: FoliagePrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 945401805, guid: a9b2c2ea8472caa40b47a88cf3badc04, type: 3}
+    - target: {fileID: 5462263298515512567, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: FoliagePrefabs.Array.data[3]
+      value: 
+      objectReference: {fileID: 2095414199, guid: a60a8f0bf6c2c2e43959578425ce1015, type: 3}
+    - target: {fileID: 5462263298515512567, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: FoliagePrefabs.Array.data[4]
+      value: 
+      objectReference: {fileID: 1605025214, guid: 345663e86a7f60545b8ec4a8ef734d07, type: 3}
+    - target: {fileID: 5462263298515512567, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: FoliagePrefabs.Array.data[5]
+      value: 
+      objectReference: {fileID: 1288633026, guid: d052e3fbbc0929a408e720b491187572, type: 3}
+    - target: {fileID: 5462263298515512567, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: FoliagePrefabs.Array.data[6]
+      value: 
+      objectReference: {fileID: 785666640, guid: 40cdb1261502c5147946ac48cebac02b, type: 3}
+    - target: {fileID: 5462263298515512567, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: FoliagePrefabs.Array.data[7]
+      value: 
+      objectReference: {fileID: 114526028, guid: f0b038078591d7441bbc6586bbc421d2, type: 3}
+    - target: {fileID: 5462263298515512567, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: FoliagePrefabs.Array.data[8]
+      value: 
+      objectReference: {fileID: 1687137008, guid: 087932bfd0e7db149b7e604943e47caf, type: 3}
+    - target: {fileID: 5462263298515512567, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: FoliagePrefabs.Array.data[9]
+      value: 
+      objectReference: {fileID: 1084553192, guid: 2934d248fbf71ae43908c5dba87ac6e5, type: 3}
+    - target: {fileID: 5462263298515512567, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: FoliagePrefabs.Array.data[10]
+      value: 
+      objectReference: {fileID: 410661016, guid: 5f392814e5dcb6a45b0380e07be63338, type: 3}
+    - target: {fileID: 8060348746302389244, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8060348746302389244, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8060348746302389244, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8060348746302389244, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8060348746302389244, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8060348746302389244, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8060348746302389244, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8060348746302389244, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8060348746302389244, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8060348746302389244, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8060348746302389244, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8697507341008290387, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
+      propertyPath: m_Name
+      value: RocksPatch
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f1bfa7a73956aff4f9ef9e9e56b0d9af, type: 3}
