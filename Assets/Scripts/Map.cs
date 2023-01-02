@@ -17,6 +17,7 @@ public class Map : MonoBehaviour
     private MapCellInfo[,] _mapInfo;
     private List<GameObject> _mapCells;
     private Dictionary<string, List<GameObject>> _foliagePatches;
+    private GameObject _globalParent;
 
     void Start()
     {
@@ -29,13 +30,21 @@ public class Map : MonoBehaviour
 
     public void Generate()
     {
+        var globalParentTransform = transform.Find("Map");
+        if (globalParentTransform != null)
+        {
+            GameObject.DestroyImmediate(globalParentTransform.gameObject);
+        }
+        _globalParent = new GameObject("Map");
+        _globalParent.transform.SetParent(transform, false);
+
         var layersParentTransform = transform.Find("Layers");
         if(layersParentTransform != null)
         {
             GameObject.DestroyImmediate(layersParentTransform.gameObject);
         }
         var layersParent = new GameObject("Layers");
-        layersParent.transform.SetParent(transform, false);
+        layersParent.transform.SetParent(_globalParent.transform, false);
 
         _mapInfo = new MapCellInfo[Width, Depth];
         var layers = new Stack<float[,]>();
@@ -114,17 +123,18 @@ public class Map : MonoBehaviour
             AddWaterLayer();
         }
 
-        transform.position = Vector3.zero;
+        _globalParent.transform.position = new Vector3(0 - Width / 2, 0, 0- Depth / 2);
     }
+
     private void GenerateMapCells()
     {
-        var callsParentTransform = transform.Find("Cells");
+        var callsParentTransform = _globalParent.transform.Find("Cells");
         if (callsParentTransform != null)
         {
             GameObject.DestroyImmediate(callsParentTransform.gameObject);
         }
         var cellsParent = new GameObject("Cells");
-        cellsParent.transform.SetParent(transform, false);
+        cellsParent.transform.SetParent(_globalParent.transform, false);
 
         _mapCells = new List<GameObject>();
         for (int x = 0; x < Width; x++)
@@ -155,7 +165,7 @@ public class Map : MonoBehaviour
             GameObject.DestroyImmediate(patchesParentTransform.gameObject);
         }
         var patchesParent = new GameObject("Patches");
-        patchesParent.transform.SetParent(transform, false);
+        patchesParent.transform.SetParent(_globalParent.transform, false);
 
         _foliagePatches = new Dictionary<string, List<GameObject>>();
 
@@ -224,7 +234,7 @@ public class Map : MonoBehaviour
             GameObject.DestroyImmediate(patchesParentTransform.gameObject);
         }
         var patchesParent = new GameObject("Water");
-        patchesParent.transform.SetParent(transform, false);
+        patchesParent.transform.SetParent(_globalParent.transform, false);
 
         var water = GameObject.CreatePrimitive(PrimitiveType.Plane);
         water.name = "WaterPlane";
@@ -241,7 +251,7 @@ public class Map : MonoBehaviour
         float maxHeight)
     {
         var layerTiles = new List<GameObject>();
-        var tilesParentTransform = transform.Find(layerName);
+        var tilesParentTransform = _globalParent.transform.Find(layerName);
         if (tilesParentTransform != null)
         {
             GameObject.DestroyImmediate(tilesParentTransform.gameObject);
@@ -257,7 +267,7 @@ public class Map : MonoBehaviour
                     var tile = GameObject.CreatePrimitive(PrimitiveType.Cube);
                     tile.name = Guid.NewGuid().ToString();
                     height = Math.Clamp(height, 0f, maxHeight);
-                    tile.transform.SetParent(transform, false);
+                    tile.transform.SetParent(_globalParent.transform, false);
                     tile.transform.localScale = new Vector3(1, height, 1);
                     tile.transform.position = new Vector3(x, height / 2 + mapInfo[x, y].Height, y);
                     layerTiles.Add(tile);
