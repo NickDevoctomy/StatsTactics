@@ -38,8 +38,8 @@ public class FoliagePatch : MonoBehaviour
         while (_instances.Count < _prefabInstanceCount)
         {
             var instance = GameObject.Instantiate(
-                FoliagePrefabs[0],
-                transform);  // pick random one each time here
+                FoliagePrefabs[Randominator.Instance.Next(0, FoliagePrefabs.Length)],
+                transform);
             instance.name = $"FoliageInstance";
             instance.SetActive(false);
             _instances.Add(instance);
