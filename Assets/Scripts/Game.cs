@@ -6,7 +6,7 @@ public class Game : MonoBehaviour
 
     void Start()
     {
-        Randominator.Initialise(Seed);
+        Initialise();
     }
 
     void Update()

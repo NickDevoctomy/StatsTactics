@@ -11,6 +11,8 @@ public class Map : MonoBehaviour
     public int Depth = 24;
     public TerrainLayer[] TerrainLayers;
     public PatchLayer[] PatchLayers;
+    public bool WaterLayer;
+    public Material WaterMaterial;
 
     private MapCellInfo[,] _mapInfo;
     private List<GameObject> _mapCells;
@@ -106,6 +108,13 @@ public class Map : MonoBehaviour
 
         GenerateMapCells();
         GeneratePatches();
+
+        if(WaterLayer)
+        {
+            AddWaterLayer();
+        }
+
+        transform.position = Vector3.zero;
     }
     private void GenerateMapCells()
     {
@@ -205,6 +214,24 @@ public class Map : MonoBehaviour
                 curPatchLayer.Name,
                 patches);
         }
+    }
+
+    private void AddWaterLayer()
+    {
+        var patchesParentTransform = transform.Find("Water");
+        if (patchesParentTransform != null)
+        {
+            GameObject.DestroyImmediate(patchesParentTransform.gameObject);
+        }
+        var patchesParent = new GameObject("Water");
+        patchesParent.transform.SetParent(transform, false);
+
+        var water = GameObject.CreatePrimitive(PrimitiveType.Plane);
+        water.name = "WaterPlane";
+        water.transform.localScale = new Vector3(Width / 2f, 1, Depth / 2f);
+        water.transform.position = new Vector3(Width / 2f, 0.38f, Depth / 2f);  // !!! TODO: Calculate y pos dynamically
+        water.transform.SetParent(patchesParent.transform, false);
+        water.GetComponent<MeshRenderer>().sharedMaterial = WaterMaterial;
     }
 
     private List<GameObject> CreateMapTiles(
