@@ -10,4 +10,5 @@ public class PatchLayer
     public int MinPatchCount = 1;
     public int MaxPatchCount = 1;
     public float MinDistanceBetweenPatches = 1f;
+    //public string Modifiers;
 }

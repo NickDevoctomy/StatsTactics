@@ -162,15 +162,31 @@ public class Map : MonoBehaviour
             while(patches.Count < patchCount)
             {
                 var allSuitableCells = _mapCells
-                    .Where(x => x.GetComponent<MapCell>().LayerName == curPatchLayer.TerrainLayerName)
-                    .ToArray();
-                var randomCell = allSuitableCells[Randominator.Instance.Next(0, allSuitableCells.Length)];
+                    .Where(x => x.GetComponent<MapCell>().LayerName != null && curPatchLayer.TerrainLayerName.Contains(x.GetComponent<MapCell>().LayerName));
+
+                // This is far too slow, locks up Unity editor and doesn't log any messages in the process
+                //if (!string.IsNullOrEmpty(curPatchLayer.Modifiers))
+                //{
+                //    Debug.Log($"Applying patch layer modifiers to filter");
+                //    var modifiers = curPatchLayer.Modifiers.Split(',');
+                //    foreach (var curModifier in modifiers)
+                //    {
+                //        var mod = curModifier.Split(":");
+                //        var layerName = mod[0];
+                //        var distance = float.Parse(mod[1]);
+
+                //        allSuitableCells = allSuitableCells.Where(x => WithinDistanceOfCell(x.transform.position, layerName, distance));
+                //    }
+                //}
+
+                var filteredSuitableCells = allSuitableCells.ToArray();
+                var randomCell = filteredSuitableCells[Randominator.Instance.Next(0, filteredSuitableCells.Length)];
                 var patchesWithinMinDistance = patches
                     .Where(x => Vector3.Distance(randomCell.transform.position, x.transform.position) < curPatchLayer.MinDistanceBetweenPatches)
                     .ToArray();
                 while(patchesWithinMinDistance.Count() > 0)
                 {
-                    randomCell = allSuitableCells[Randominator.Instance.Next(0, allSuitableCells.Length)];
+                    randomCell = filteredSuitableCells[Randominator.Instance.Next(0, filteredSuitableCells.Length)];
                     patchesWithinMinDistance = patches
                         .Where(x => Vector3.Distance(randomCell.transform.position, x.transform.position) < curPatchLayer.MinDistanceBetweenPatches)
                         .ToArray();
@@ -264,5 +280,19 @@ public class Map : MonoBehaviour
             mesh = meshFilter.sharedMesh,
             transform = gameObject.transform.localToWorldMatrix
         };
+    }
+
+    private bool WithinDistanceOfCell(
+        Vector3 location,
+        string layer,
+        float maxDistance)
+    {
+        Debug.Log($"Checking within distance from cell...");
+        var colliders = Physics.OverlapSphere(
+            location,
+            maxDistance);
+        return colliders
+            .Where(x => x.gameObject.tag == "MapCell")
+            .Any(x => x.GetComponent<MapCell>().LayerName == layer);
     }
 }
