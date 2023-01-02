@@ -4,8 +4,11 @@ public class Game : MonoBehaviour
 {
     public string Seed;
 
+    private Map _map;
+
     void Start()
     {
+        _map = GetComponent<Map>();
         Initialise();
     }
 
@@ -17,8 +20,6 @@ public class Game : MonoBehaviour
     public void Initialise()
     {
         Randominator.Initialise(Seed);
-
-        var map = GetComponent<Map>();
-        map.Generate();
+        _map.Generate();
     }
 }
